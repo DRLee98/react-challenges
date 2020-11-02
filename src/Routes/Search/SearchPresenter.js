@@ -1,13 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
+import Helmet from "react-helmet";
+
 import Loader from "Components/Loader";
 import Section from "Components/Section";
-import Message from "../../Components/Message";
-import Poster from "../../Components/Poster";
+import Message from "Components/Message";
+import Poster from "Components/Poster";
 
 const Container = styled.div`
-  padding: 0px 20px;
+  padding: 20px;
 `;
 
 const Form = styled.form`
@@ -23,6 +25,9 @@ const Input = styled.input`
 
 const SearchPresenter = ({ movieResults, tvResults, loading, searchTerm, handleSubmit, error, updateTerm }) => (
   <Container>
+    <Helmet>
+      <title>Search | Nomflix</title>
+    </Helmet>
     <Form onSubmit={handleSubmit}>
       <Input placeholder="Search Movies or TV Shows..." value={searchTerm} onChange={updateTerm} />
     </Form>
