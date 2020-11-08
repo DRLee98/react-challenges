@@ -45,15 +45,17 @@ const Title = styled.h3`
 const Overview = styled.p`
   font-size: 22px;
   opacity: 0.7;
-  line-height: 1.5;
-  width: 50%;
+  line-height: 1.3;
+  width: 90%;
   text-align: center;
 `;
 
 const Collections = styled.div`
   margin-top: 20px;
   display: flex;
+  justify-content: space-evenly;
   height: 100%;
+  width: 100%;
 `;
 
 const DetailPresenter = ({ data, loading, error }) =>

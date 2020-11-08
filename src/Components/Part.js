@@ -5,6 +5,7 @@ import styled from "styled-components";
 
 const Container = styled.div`
   font-size: 12px;
+  width: 20%;
 `;
 
 const SLink = styled(Link)`
@@ -15,12 +16,13 @@ const SLink = styled(Link)`
 `;
 
 const Cover = styled.div`
-  width: 80%;
+  width: 100%;
+  height: 100%;
   background-image: url(${(props) => props.bgImage});
   background-position: center center;
   background-size: cover;
-  height: 100%;
   border-radius: 5px;
+  transition: opacity 0.2s linear;
 `;
 
 const Title = styled.h3`
@@ -43,20 +45,40 @@ const Item = styled.span`
 
 const Overview = styled.p`
   font-size: 18px;
-  opacity: 0.7;
   line-height: 1.5;
-  width: 80%;
   font-weight: 700;
+  padding: 15px;
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.2s linear;
+`;
+
+const CoverContainer = styled.div`
+  width: 100%;
+  height: 600px;
+  position: relative;
+  &:hover {
+    ${Cover} {
+      opacity: 0.4;
+    }
+    ${Overview} {
+      opacity: 1;
+    }
+  }
 `;
 
 const Part = ({ id, title, release_date, poster_path, vote_average, overview }) => (
   <Container>
     <SLink to={`/movie/${id}`}>
-      <Cover
-        bgImage={
-          poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : require("assets/no_poster.jpg").default
-        }
-      />
+      <CoverContainer>
+        <Cover
+          bgImage={
+            poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : require("assets/no_poster.jpg").default
+          }
+        />
+        <Overview>{overview}</Overview>
+      </CoverContainer>
       <Title>{title}</Title>
       <ItemContainer>
         <Item>{release_date.substring(0, 4)}</Item>
@@ -67,7 +89,6 @@ const Part = ({ id, title, release_date, poster_path, vote_average, overview }) 
           {vote_average}/10
         </Item>
       </ItemContainer>
-      <Overview>{overview.length > 150 ? `${overview.substring(0, 150)}...` : overview}</Overview>
     </SLink>
   </Container>
 );
