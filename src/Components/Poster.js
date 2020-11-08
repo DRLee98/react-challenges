@@ -40,6 +40,8 @@ const ImageContainer = styled.div`
 const Title = styled.span`
   display: block;
   margin-bottom: 3px;
+  font-size: 15px;
+  font-weight: 900;
 `;
 
 const Year = styled.span`
@@ -52,7 +54,7 @@ const Poster = ({ id, imageUrl, title, rating, year, isMovie = false }) => (
     <Container>
       <ImageContainer>
         <Image
-          bgUrl={imageUrl ? `https://image.tmdb.org/t/p/w300${imageUrl}` : require("../assets/noPosterSmall.png")}
+          bgUrl={imageUrl ? `https://image.tmdb.org/t/p/w300${imageUrl}` : require("assets/no_poster.jpg").default}
         />
         <Rating>
           <span role="img" aria-label="rating">
@@ -61,7 +63,7 @@ const Poster = ({ id, imageUrl, title, rating, year, isMovie = false }) => (
           {rating}/10
         </Rating>
       </ImageContainer>
-      <Title>{title.length > 18 ? `${title.substring(0, 18)}...` : title}</Title>
+      <Title>{title.length > 13 ? `${title.substring(0, 13)}...` : title}</Title>
       <Year>{year}</Year>
     </Container>
   </Link>
