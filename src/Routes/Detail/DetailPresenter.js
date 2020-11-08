@@ -227,7 +227,7 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
                 {result.release_date ? result.release_date.substring(0, 4) : result.first_air_date.substring(0, 4)}
               </Item>
               <Divider>•</Divider>
-              <Item>{result.runtime ? result.runtime : result.episode_run_time[0]} min</Item>
+              <Item>{result.runtime || result.runtime === 0 ? result.runtime : result.episode_run_time[0]} min</Item>
               <Divider>•</Divider>
               <Item>
                 {result.genres &&
