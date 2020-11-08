@@ -26,6 +26,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "homepage": "https://youthful-brahmagupta-0f29b7.netlify.app",
   "browserslist": {
     "production": [
       ">0.2%",
