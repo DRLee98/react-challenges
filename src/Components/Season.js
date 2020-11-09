@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -77,29 +78,32 @@ const Season = ({
   overview,
   poster_path,
   season_number,
+  location: { pathname },
 }) => (
   <Container>
-    <CoverContainer>
-      <Cover
-        src={
-          poster_path
-            ? `https://image.tmdb.org/t/p/original${poster_path}`
-            : require("assets/no_poster.jpg").default
-        }
-      ></Cover>
-      <ItemContainer>
-        <Overview>
-          {overview.length > 150
-            ? `${overview.substring(0, 150)}...`
-            : overview}
-        </Overview>
-        <Box>
-          <Title>{name}</Title>
-          <Item>{air_date && air_date.substring(0, 4)}</Item>
-          <Item>Episode: {episode_count === 0 ? "0" : episode_count}</Item>
-        </Box>
-      </ItemContainer>
-    </CoverContainer>
+    <Link to={`${pathname}/season/${season_number}`}>
+      <CoverContainer>
+        <Cover
+          src={
+            poster_path
+              ? `https://image.tmdb.org/t/p/original${poster_path}`
+              : require("assets/no_poster.jpg").default
+          }
+        ></Cover>
+        <ItemContainer>
+          <Overview>
+            {overview.length > 150
+              ? `${overview.substring(0, 150)}...`
+              : overview}
+          </Overview>
+          <Box>
+            <Title>{name}</Title>
+            <Item>{air_date && air_date.substring(0, 4)}</Item>
+            <Item>Episode: {episode_count === 0 ? "0" : episode_count}</Item>
+          </Box>
+        </ItemContainer>
+      </CoverContainer>
+    </Link>
   </Container>
 );
 
@@ -113,4 +117,4 @@ Season.propTypes = {
   overview: PropTypes.string,
 };
 
-export default Season;
+export default withRouter(Season);

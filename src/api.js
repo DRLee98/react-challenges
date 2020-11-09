@@ -36,6 +36,12 @@ export const tvApi = {
         append_to_response: "videos",
       },
     }),
+  seasonDetail: (id, season) =>
+    api.get(`tv/${id}/season/${season}`, {
+      params: {
+        append_to_response: "videos",
+      },
+    }),
   showCredits: (id) => api.get(`tv/${id}/credits`),
   search: (term) =>
     api.get("search/tv", {
