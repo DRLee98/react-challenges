@@ -66,36 +66,22 @@ const CoverContainer = styled.div`
       opacity: 1;
     }
     ${Cover} {
-      opacity: 0.3;
+      opacity: 0.5;
     }
   }
 `;
 
-const Season = ({
-  air_date,
-  episode_count,
-  name,
-  overview,
-  poster_path,
-  season_number,
-  location: { pathname },
-}) => (
+const Season = ({ air_date, episode_count, name, overview, poster_path, season_number, location: { pathname } }) => (
   <Container>
     <Link to={`${pathname}/season/${season_number}`}>
       <CoverContainer>
         <Cover
           src={
-            poster_path
-              ? `https://image.tmdb.org/t/p/original${poster_path}`
-              : require("assets/no_poster.jpg").default
+            poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : require("assets/no_poster.jpg").default
           }
         ></Cover>
         <ItemContainer>
-          <Overview>
-            {overview.length > 150
-              ? `${overview.substring(0, 150)}...`
-              : overview}
-          </Overview>
+          <Overview>{overview.length > 150 ? `${overview.substring(0, 150)}...` : overview}</Overview>
           <Box>
             <Title>{name}</Title>
             <Item>{air_date && air_date.substring(0, 4)}</Item>

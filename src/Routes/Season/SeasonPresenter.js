@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import Helmet from "react-helmet";
 import styled from "styled-components";
 import Loader from "Components/Loader";
+import Episode from "Components/Episode";
 
 const Container = styled.div`
   width: 100%;
@@ -39,31 +40,28 @@ const Data = styled.div`
 const Title = styled.h3`
   font-size: 32px;
   font-weight: 900;
+  margin-right: 10px;
+  display: inline-block;
 `;
 
 const Year = styled.span`
   font-size: 18px;
   font-weight: 700;
   line-height: 2;
+  color: rgb(255 255 255 / 0.7);
 `;
 
 const Overview = styled.p`
   font-size: 22px;
   opacity: 0.7;
-  line-height: 1.3;
+  line-height: 1.1;
   width: 90%;
-  text-align: center;
+  text-align: left;
 `;
 
-const Collections = styled.div`
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-evenly;
-  height: 100%;
-  width: 100%;
-`;
+const EpisodeContainer = styled.div``;
 
-const DetailPresenter = ({ data, loading, error }) =>
+const SeasonPresenter = ({ data, loading, error }) =>
   loading ? (
     <>
       <Helmet>
@@ -86,19 +84,22 @@ const DetailPresenter = ({ data, loading, error }) =>
         />
         <Data>
           <Title>{data.name}</Title>
-          <Year>
-            {(data.air_date && data.air_date.substring(0, 4)) || "Undefined"}
-          </Year>
-          <Overview>{data.overview}</Overview>
+          <Year>{(data.air_date && data.air_date.substring(0, 4)) || "Undefined"}</Year>
+          <Overview>{data.overview.length > 300 ? `${data.overview.substring(0, 300)}...` : data.overview}</Overview>
+          <EpisodeContainer>
+            {data.episodes.map((episode) => (
+              <Episode key={episode.id} {...episode} />
+            ))}
+          </EpisodeContainer>
         </Data>
       </Content>
     </Container>
   );
 
-DetailPresenter.propTypes = {
+SeasonPresenter.propTypes = {
   data: PropTypes.object,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
 };
 
-export default DetailPresenter;
+export default SeasonPresenter;

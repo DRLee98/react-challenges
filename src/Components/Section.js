@@ -88,12 +88,13 @@ const RightButton = styled.button`
   }
 `;
 
-const Section = ({ title, children }) => (
+const Section = ({ title, children, viewFunc, view }) => (
   <Container>
     <TitleBox>
       <Title>{title}</Title>
       <Icon>
-        <i onClick={viewHandle} class="fas fa-eye"></i>
+        <i onClick={viewFunc} class="fas fa-eye"></i>
+        {console.log(view)}
       </Icon>
     </TitleBox>
     <PosterContainer>
@@ -110,10 +111,7 @@ const Section = ({ title, children }) => (
 
 Section.propTypes = {
   title: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 };
 
 export default Section;

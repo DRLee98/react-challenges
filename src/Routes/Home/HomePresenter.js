@@ -32,14 +32,7 @@ const Icon = styled.div`
   }
 `;
 
-const HomePresenter = ({
-  nowPlaying,
-  popular,
-  upcoming,
-  loading,
-  error,
-  pageFunc,
-}) => (
+const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error, pageFunc, viewFunc, view }) => (
   <>
     <Helmet>
       <title>Movies | Nomflix</title>
@@ -52,7 +45,7 @@ const HomePresenter = ({
           <title>Movies | Nomflix</title>
         </Helmet>
         {nowPlaying && nowPlaying.length > 0 && (
-          <Section title="Now Playing">
+          <Section title="Now Playing" view={view.nowPlaying} viewFunc={viewFunc.nowPlayingView}>
             {nowPlaying.map((movie) => (
               <Poster
                 key={movie.id}
@@ -72,7 +65,7 @@ const HomePresenter = ({
           </Section>
         )}
         {upcoming && upcoming.length > 0 && (
-          <Section title="Upcoming Movies">
+          <Section title="Upcoming Movies" view={view.upcoming} viewFunc={viewFunc.upcomingView}>
             {upcoming.map((movie) => (
               <Poster
                 key={movie.id}
@@ -92,7 +85,7 @@ const HomePresenter = ({
           </Section>
         )}
         {popular && popular.length > 0 && (
-          <Section title="Popular Movies">
+          <Section title="Popular Movies" view={view.popular} viewFunc={viewFunc.popularView}>
             {popular.map((movie) => (
               <Poster
                 key={movie.id}

@@ -14,6 +14,11 @@ const HomeContainer = () => {
     upcoming: 1,
     popular: 1,
   });
+  const [view, setView] = useState({
+    nowPlaying: true,
+    upcoming: true,
+    popular: true,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
@@ -46,17 +51,18 @@ const HomeContainer = () => {
     popularPage: () => setPage({ ...page, popular: page.popular + 1 }),
   };
 
+  const viewMode = {
+    nowPlayingView: () => setView({ ...view, nowPlaying: view.nowPlaying ? false : true }),
+    upcomingView: () => setView({ ...view, upcoming: view.upcoming ? false : true }),
+    popularView: () => setView({ ...view, popular: view.popular ? false : true }),
+  };
+
   useEffect(() => {
     LoadData();
   }, [page]);
 
   return (
-    <HomePresenter
-      loading={loading}
-      error={error}
-      pageFunc={nextPage}
-      {...data}
-    />
+    <HomePresenter loading={loading} error={error} pageFunc={nextPage} viewFunc={viewMode} view={view} {...data} />
   );
 };
 
