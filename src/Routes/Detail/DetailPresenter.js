@@ -7,9 +7,9 @@ import styled from "styled-components";
 import Loader from "Components/Loader";
 import Season from "Components/Season";
 import Profile from "Components/Profile";
+import { handleClick } from "../../func";
 
 const Container = styled.div`
-  height: calc(100vh - 50px);
   width: 100%;
   position: relative;
   padding: 50px;
@@ -107,37 +107,69 @@ const Overview = styled.p`
 `;
 
 const VideoContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+  height: 315px;
+`;
+
+const VideoBox = styled.div`
   display: flex;
-  margin: 15px 0;
+  gap: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 315px;
+  transition: all 0.5s ease;
 `;
 
 const Video = styled.iframe`
-  width: 460px;
-  height: 255px;
+  width: 560px;
+  height: 315px;
   &:not(:last-child) {
     margin-right: 10px;
   }
 `;
 
 const CastContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+  height: 225px;
+`;
+
+const CastBox = styled.div`
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 225px;
+  transition: all 0.5s ease;
 `;
 
 const Collections = styled.div`
-  width: 60%;
+  margin-left: auto;
 `;
 
 const CollectionCover = styled.img`
-  width: 100%;
+  width: 200px;
   border-radius: 5px;
+`;
+
+const SeasonsContainer = styled.div`
+  position: relative;
+  overflow: hidden;
+  height: 400px;
 `;
 
 const Seasons = styled.div`
   display: flex;
-  flex-wrap: wrap;
   justify-content: flex-start;
+  gap: 10px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 400px;
+  transition: all 0.5s ease;
 `;
 
 const IMDb = styled.span`
@@ -196,6 +228,46 @@ const Country = styled.li`
   margin-top: 10px;
 `;
 
+const LeftButton = styled.button`
+  all: unset;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  text-align: center;
+  background-image: none;
+  color: #ffffff;
+  font-size: 25px;
+  opacity: 0;
+  z-index: 5;
+  transition: all 0.5s ease;
+  &:hover {
+    opacity: 1;
+    background-image: linear-gradient(to right, black, #0d0d0d00);
+  }
+`;
+
+const RightButton = styled.button`
+  all: unset;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 50px;
+  text-align: center;
+  background-image: none;
+  color: #ffffff;
+  font-size: 25px;
+  opacity: 0;
+  z-index: 5;
+  transition: all 0.5s ease;
+  &:hover {
+    opacity: 1;
+    background-image: linear-gradient(to left, black, #0d0d0d00);
+  }
+`;
+
 const DetailPresenter = ({ result, credits, loading, error }) =>
   loading ? (
     <>
@@ -204,12 +276,16 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
       </Helmet>
       <Loader />
     </>
+  ) : error ? (
+    "Error"
   ) : (
     <Container>
       <Helmet>
         <title>{result.title ? result.title : result.name} | Nomflix</title>
       </Helmet>
-      <Backdrop bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`} />
+      <Backdrop
+        bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
+      />
       <Content>
         <Cover
           bgImage={
@@ -224,22 +300,38 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
             <ItemBox>
               <Title>{result.title ? result.title : result.name}</Title>
               <Item>
-                {result.release_date ? result.release_date.substring(0, 4) : result.first_air_date.substring(0, 4)}
+                {result.release_date
+                  ? (result.release_date &&
+                      result.release_date.substring(0, 4)) ||
+                    "Undefined"
+                  : (result.first_air_date &&
+                      result.first_air_date.substring(0, 4)) ||
+                    "Undefined"}
               </Item>
               <Divider>•</Divider>
-              <Item>{result.runtime || result.runtime === 0 ? result.runtime : result.episode_run_time[0]} min</Item>
+              <Item>
+                {result.runtime || result.runtime === 0
+                  ? result.runtime
+                  : result.episode_run_time[0]}{" "}
+                min
+              </Item>
               <Divider>•</Divider>
               <Item>
                 {result.genres &&
                   result.genres.map((genre, index) =>
-                    index === result.genres.length - 1 ? genre.name : `${genre.name} / `,
+                    index === result.genres.length - 1
+                      ? genre.name
+                      : `${genre.name} / `
                   )}
               </Item>
               {result.imdb_id ? (
                 <>
                   <Divider>•</Divider>
                   <Item>
-                    <a href={`https://www.imdb.com/title/${result.imdb_id}`} target="_blank">
+                    <a
+                      href={`https://www.imdb.com/title/${result.imdb_id}`}
+                      target="_blank"
+                    >
                       <IMDb>IMDb</IMDb>
                     </a>
                   </Item>
@@ -272,9 +364,20 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
           </ItemContainer>
           {result.videos.results.length >= 1 && (
             <VideoContainer>
-              {result.videos.results.map((video) => (
-                <Video key={video.id} src={`https://www.youtube.com/embed/${video.key}`}></Video>
-              ))}
+              <LeftButton>
+                <i onClick={handleClick} class="fas fa-chevron-left"></i>
+              </LeftButton>
+              <VideoBox>
+                {result.videos.results.map((video) => (
+                  <Video
+                    key={video.id}
+                    src={`https://www.youtube.com/embed/${video.key}`}
+                  ></Video>
+                ))}
+              </VideoBox>
+              <RightButton>
+                <i onClick={handleClick} class="fas fa-chevron-right"></i>
+              </RightButton>
             </VideoContainer>
           )}
 
@@ -282,9 +385,17 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
             <>
               <Title>Cast</Title>
               <CastContainer>
-                {credits.cast.map((actor) => (
-                  <Profile key={actor.id} {...actor} />
-                ))}
+                <LeftButton>
+                  <i onClick={handleClick} class="fas fa-chevron-left"></i>
+                </LeftButton>
+                <CastBox>
+                  {credits.cast.map((actor) => (
+                    <Profile key={actor.id} {...actor} />
+                  ))}
+                </CastBox>
+                <RightButton>
+                  <i onClick={handleClick} class="fas fa-chevron-right"></i>
+                </RightButton>
               </CastContainer>
             </>
           )}
@@ -292,11 +403,19 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
           {result.seasons && result.seasons.length > 1 && (
             <>
               <Title>Seasons</Title>
-              <Seasons>
-                {result.seasons.map((season) => (
-                  <Season key={season.id} {...season} />
-                ))}
-              </Seasons>
+              <SeasonsContainer>
+                <LeftButton>
+                  <i onClick={handleClick} class="fas fa-chevron-left"></i>
+                </LeftButton>
+                <Seasons>
+                  {result.seasons.map((season) => (
+                    <Season key={season.id} {...season} />
+                  ))}
+                </Seasons>
+                <RightButton>
+                  <i onClick={handleClick} class="fas fa-chevron-right"></i>
+                </RightButton>
+              </SeasonsContainer>
             </>
           )}
           <ProductionContainer>
@@ -305,15 +424,21 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
                 {result.production_companies.map(
                   (company) =>
                     company.logo_path && (
-                      <CompanyLogo key={company.id} src={`https://image.tmdb.org/t/p/original${company.logo_path}`} />
-                    ),
+                      <CompanyLogo
+                        key={company.id}
+                        src={`https://image.tmdb.org/t/p/original${company.logo_path}`}
+                      />
+                    )
                 )}
                 {result.networks &&
                   result.networks.map(
                     (network) =>
                       network.logo_path && (
-                        <CompanyLogo key={network.id} src={`https://image.tmdb.org/t/p/original${network.logo_path}`} />
-                      ),
+                        <CompanyLogo
+                          key={network.id}
+                          src={`https://image.tmdb.org/t/p/original${network.logo_path}`}
+                        />
+                      )
                   )}
               </LogoContainer>
               <CompanyList>
@@ -325,7 +450,7 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
                       <Company key={company.id}>{company.name}</Company>
                       <Divider>•</Divider>
                     </>
-                  ),
+                  )
                 )}
                 {result.networks &&
                   result.networks.map((network) => (
@@ -338,8 +463,12 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
             </CompaniesContainer>
             <CountriesContainer>
               {result.production_countries
-                ? result.production_countries.map((country, i) => <Country key={i}>{country.name}</Country>)
-                : result.origin_country.map((country, i) => <Country key={i}>{country}</Country>)}
+                ? result.production_countries.map((country, i) => (
+                    <Country key={i}>{country.name}</Country>
+                  ))
+                : result.origin_country.map((country, i) => (
+                    <Country key={i}>{country}</Country>
+                  ))}
             </CountriesContainer>
           </ProductionContainer>
         </Data>

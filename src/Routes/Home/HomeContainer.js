@@ -1,48 +1,63 @@
 /* eslint-disable import/no-anonymous-default-export */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import HomePresenter from "./HomePresenter";
 import { moviesApi } from "api";
 
-export default class extends React.Component {
-  state = {
-    nowPlaying: null,
-    upcoming: null,
-    popular: null,
-    error: null,
-    loading: true,
-  };
+const HomeContainer = () => {
+  const [data, setData] = useState({
+    nowPlaying: [],
+    upcoming: [],
+    popular: [],
+  });
+  const [page, setPage] = useState({
+    nowPlaying: 1,
+    upcoming: 1,
+    popular: 1,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
 
-  async componentDidMount() {
+  const LoadData = async () => {
     try {
       const {
         data: { results: nowPlaying },
-      } = await moviesApi.nowPlaying();
+      } = await moviesApi.nowPlaying(page.nowPlaying);
       const {
         data: { results: upcoming },
-      } = await moviesApi.upcoming();
+      } = await moviesApi.upcoming(page.upcoming);
       const {
         data: { results: popular },
-      } = await moviesApi.popular();
-      this.setState({
-        nowPlaying,
-        upcoming,
-        popular,
+      } = await moviesApi.popular(page.popular);
+      setData({
+        nowPlaying: [...data.nowPlaying, ...nowPlaying],
+        upcoming: [...data.upcoming, ...upcoming],
+        popular: [...data.popular, ...popular],
       });
     } catch {
-      this.setState({
-        error: "Can't find movie information.",
-      });
+      setError("Can't find movie information.");
     } finally {
-      this.setState({
-        loading: false,
-      });
+      setLoading(false);
     }
-  }
+  };
 
-  render() {
-    const { nowPlaying, upcoming, popular, error, loading } = this.state;
-    return (
-      <HomePresenter nowPlaying={nowPlaying} upcoming={upcoming} popular={popular} error={error} loading={loading} />
-    );
-  }
-}
+  const nextPage = {
+    nowPlayingPage: () => setPage({ ...page, nowPlaying: page.nowPlaying + 1 }),
+    upcomingPage: () => setPage({ ...page, upcoming: page.upcoming + 1 }),
+    popularPage: () => setPage({ ...page, popular: page.popular + 1 }),
+  };
+
+  useEffect(() => {
+    LoadData();
+  }, [page]);
+
+  return (
+    <HomePresenter
+      loading={loading}
+      error={error}
+      pageFunc={nextPage}
+      {...data}
+    />
+  );
+};
+
+export default HomeContainer;

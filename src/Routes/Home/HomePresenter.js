@@ -12,7 +12,34 @@ const Container = styled.div`
   padding: 20px;
 `;
 
-const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) => (
+const NextPage = styled.div`
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 60px;
+  border-radius: 5px;
+  background-color: rgb(20 20 20 / 50%);
+`;
+
+const Icon = styled.div`
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 50%;
+  transition: all 0.5s ease;
+  &:hover {
+    background-color: rgb(255 255 255 / 0.3);
+  }
+`;
+
+const HomePresenter = ({
+  nowPlaying,
+  popular,
+  upcoming,
+  loading,
+  error,
+  pageFunc,
+}) => (
   <>
     <Helmet>
       <title>Movies | Nomflix</title>
@@ -37,6 +64,11 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) => (
                 isMovie={true}
               />
             ))}
+            <NextPage>
+              <Icon>
+                <i onClick={pageFunc.nowPlayingPage} class="fas fa-plus"></i>
+              </Icon>
+            </NextPage>
           </Section>
         )}
         {upcoming && upcoming.length > 0 && (
@@ -52,6 +84,11 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) => (
                 isMovie={true}
               />
             ))}
+            <NextPage>
+              <Icon>
+                <i onClick={pageFunc.upcomingPage} class="fas fa-plus"></i>
+              </Icon>
+            </NextPage>
           </Section>
         )}
         {popular && popular.length > 0 && (
@@ -67,6 +104,11 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error }) => (
                 isMovie={true}
               />
             ))}
+            <NextPage>
+              <Icon>
+                <i onClick={pageFunc.popularPage} class="fas fa-plus"></i>
+              </Icon>
+            </NextPage>
           </Section>
         )}
         {error && <Message color="#e74c3c" text={error} />}

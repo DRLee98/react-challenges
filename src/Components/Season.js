@@ -8,13 +8,12 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   height: 400px;
-  width: 20%;
+  width: 250px;
 `;
 
-const Cover = styled.div`
+const Cover = styled.img`
   width: 100%;
   height: 100%;
-  background-image: url(${(props) => props.bgImage});
   background-position: center center;
   background-size: cover;
   opacity: 1;
@@ -71,16 +70,29 @@ const CoverContainer = styled.div`
   }
 `;
 
-const Season = ({ air_date, episode_count, name, overview, poster_path, season_number }) => (
+const Season = ({
+  air_date,
+  episode_count,
+  name,
+  overview,
+  poster_path,
+  season_number,
+}) => (
   <Container>
     <CoverContainer>
       <Cover
-        bgImage={
-          poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : require("assets/no_poster.jpg").default
+        src={
+          poster_path
+            ? `https://image.tmdb.org/t/p/original${poster_path}`
+            : require("assets/no_poster.jpg").default
         }
       ></Cover>
       <ItemContainer>
-        <Overview>{overview.length > 150 ? `${overview.substring(0, 150)}...` : overview}</Overview>
+        <Overview>
+          {overview.length > 150
+            ? `${overview.substring(0, 150)}...`
+            : overview}
+        </Overview>
         <Box>
           <Title>{name}</Title>
           <Item>{air_date && air_date.substring(0, 4)}</Item>

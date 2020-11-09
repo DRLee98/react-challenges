@@ -1,42 +1,64 @@
 /* eslint-disable import/no-anonymous-default-export */
-import React from 'react';
-import TVPresenter from './TVPresenter';
-import { tvApi } from '../../api';
+import React, { useState, useEffect } from "react";
+import TVPresenter from "./TVPresenter";
+import { tvApi } from "../../api";
 
-export default class extends React.Component {
-  state = {
-    topRated: null,
-    popular: null,
-    airingToday: null,
-    loading: true,
-    error: null,
-  };
+const TVContainer = () => {
+  const [data, setData] = useState({
+    topRated: [],
+    popular: [],
+    airingToday: [],
+  });
+  const [page, setPage] = useState({
+    topRated: 1,
+    popular: 1,
+    airingToday: 1,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
 
-  async componentDidMount() {
+  const LoadData = async () => {
     try {
       const {
         data: { results: topRated },
-      } = await tvApi.topRated();
+      } = await tvApi.topRated(page.topRated);
       const {
         data: { results: popular },
-      } = await tvApi.popular();
+      } = await tvApi.popular(page.popular);
       const {
         data: { results: airingToday },
-      } = await tvApi.airingToday();
-      this.setState({ topRated, popular, airingToday });
-    } catch {
-      this.setState({
-        error: "Can't find TV information.",
+      } = await tvApi.airingToday(page.airingToday);
+      setData({
+        topRated: [...data.topRated, ...topRated],
+        popular: [...data.popular, ...popular],
+        airingToday: [...data.airingToday, ...airingToday],
       });
+    } catch {
+      setError("Can't find movie information.");
     } finally {
-      this.setState({ loading: false });
+      setLoading(false);
     }
-  }
+  };
 
-  render() {
-    const { topRated, popular, airingToday, loading, error } = this.state;
-    return (
-      <TVPresenter topRated={topRated} popular={popular} airingToday={airingToday} loading={loading} error={error} />
-    );
-  }
-}
+  const nextPage = {
+    topRatedPage: () => setPage({ ...page, topRated: page.topRated + 1 }),
+    popularPage: () => setPage({ ...page, popular: page.popular + 1 }),
+    airingTodayPage: () =>
+      setPage({ ...page, airingToday: page.airingToday + 1 }),
+  };
+
+  useEffect(() => {
+    LoadData();
+  }, [page]);
+
+  return (
+    <TVPresenter
+      loading={loading}
+      error={error}
+      pageFunc={nextPage}
+      {...data}
+    />
+  );
+};
+
+export default TVContainer;

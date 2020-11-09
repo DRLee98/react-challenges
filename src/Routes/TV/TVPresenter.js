@@ -12,7 +12,34 @@ const Container = styled.div`
   padding: 20px;
 `;
 
-const TVPresenter = ({ topRated, popular, airingToday, loading, error }) => (
+const NextPage = styled.div`
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 60px;
+  border-radius: 5px;
+  background-color: rgb(20 20 20 / 50%);
+`;
+
+const Icon = styled.div`
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 50%;
+  transition: all 0.5s ease;
+  &:hover {
+    background-color: rgb(255 255 255 / 0.3);
+  }
+`;
+
+const TVPresenter = ({
+  topRated,
+  popular,
+  airingToday,
+  loading,
+  error,
+  pageFunc,
+}) => (
   <>
     <Helmet>
       <title>TV Shows | Nomflix</title>
@@ -33,6 +60,11 @@ const TVPresenter = ({ topRated, popular, airingToday, loading, error }) => (
                 year={show.first_air_date.substring(0, 4)}
               />
             ))}
+            <NextPage>
+              <Icon>
+                <i onClick={pageFunc.topRatedPage} class="fas fa-plus"></i>
+              </Icon>
+            </NextPage>
           </Section>
         )}
         {popular && popular.length > 0 && (
@@ -47,6 +79,11 @@ const TVPresenter = ({ topRated, popular, airingToday, loading, error }) => (
                 year={show.first_air_date.substring(0, 4)}
               />
             ))}
+            <NextPage>
+              <Icon>
+                <i onClick={pageFunc.popularPage} class="fas fa-plus"></i>
+              </Icon>
+            </NextPage>
           </Section>
         )}
         {airingToday && airingToday.length > 0 && (
@@ -61,6 +98,11 @@ const TVPresenter = ({ topRated, popular, airingToday, loading, error }) => (
                 year={show.first_air_date.substring(0, 4)}
               />
             ))}
+            <NextPage>
+              <Icon>
+                <i onClick={pageFunc.airingTodayPage} class="fas fa-plus"></i>
+              </Icon>
+            </NextPage>
           </Section>
         )}
         {error && <Message color="#e74c3c" text={error} />}

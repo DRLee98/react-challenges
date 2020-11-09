@@ -23,8 +23,12 @@ const List = styled.ul`
 const Item = styled.li`
   width: 80px;
   height: 50px;
+  &:hover {
+    border-bottom: 3px solid
+      ${(props) => (props.current ? "#3498db" : "#ffffff4d")};
+  }
   border-bottom: 3px solid
-    ${props => (props.current ? "#3498db" : "transparent")};
+    ${(props) => (props.current ? "#3498db" : "transparent")};
   transition: border-bottom 0.5s ease-in-out;
 `;
 
@@ -33,6 +37,8 @@ const SLink = styled(Link)`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 15px;
+  font-weight: 700;
 `;
 
 export default withRouter(({ location: { pathname } }) => (
