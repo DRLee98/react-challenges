@@ -28,5 +28,5 @@ export const handleClick = (e) => {
 };
 
 export const handleBack = () => {
-  history.back();
+  window.history.back();
 };
