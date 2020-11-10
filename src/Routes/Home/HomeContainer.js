@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-anonymous-default-export */
 import React, { useState, useEffect } from "react";
 import HomePresenter from "./HomePresenter";
