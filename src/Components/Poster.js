@@ -102,7 +102,7 @@ const Poster = ({ id, imageUrl, title, rating, year, isMovie = false }) => (
             <Year>{year}</Year>
             <Rating>
               <Icon>
-                <i class="fas fa-star"></i>
+                <i className="fas fa-star"></i>
               </Icon>
               <RatingValue> {rating}</RatingValue>
               <RatingMax>/10 </RatingMax>

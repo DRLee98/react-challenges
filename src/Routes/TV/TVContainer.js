@@ -14,6 +14,11 @@ const TVContainer = () => {
     popular: 1,
     airingToday: 1,
   });
+  const [view, setView] = useState({
+    topRated: true,
+    popular: true,
+    airingToday: true,
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
@@ -47,6 +52,15 @@ const TVContainer = () => {
       setPage({ ...page, airingToday: page.airingToday + 1 }),
   };
 
+  const viewMode = {
+    topRatedView: () =>
+      setView({ ...view, topRated: view.topRated ? false : true }),
+    popularView: () =>
+      setView({ ...view, popular: view.popular ? false : true }),
+    airingToday: () =>
+      setView({ ...view, airingToday: view.airingToday ? false : true }),
+  };
+
   useEffect(() => {
     LoadData();
   }, [page]);
@@ -56,6 +70,8 @@ const TVContainer = () => {
       loading={loading}
       error={error}
       pageFunc={nextPage}
+      viewFunc={viewMode}
+      view={view}
       {...data}
     />
   );

@@ -76,12 +76,21 @@ const Overview = styled.p`
   opacity: 0.8;
 `;
 
-const Episode = ({ air_date, name, overview, still_path, vote_average, vote_count, guest_stars }) => (
+const Episode = ({
+  air_date,
+  name,
+  overview,
+  still_path,
+  vote_average,
+  vote_count,
+}) => (
   <Container>
     <Data>
       <Image
         bgUrl={
-          still_path ? `https://image.tmdb.org/t/p/original${still_path}` : require("assets/no_poster.jpg").default
+          still_path
+            ? `https://image.tmdb.org/t/p/original${still_path}`
+            : require("assets/no_poster.jpg").default
         }
       />
       <Contents>
@@ -89,7 +98,7 @@ const Episode = ({ air_date, name, overview, still_path, vote_average, vote_coun
         <Year>{(air_date && air_date.substring(0, 4)) || "Undefined"}</Year>
         <Vote>
           <Icon>
-            <i class="fas fa-star"></i>
+            <i className="fas fa-star"></i>
           </Icon>
           <VoteAvg> {vote_average}</VoteAvg>
           <VoteMax>/10 </VoteMax>

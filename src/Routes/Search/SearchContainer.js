@@ -1,67 +1,72 @@
 /* eslint-disable import/no-anonymous-default-export */
-import React from 'react';
-import SearchPresenter from './SearchPresenter';
-import { moviesApi, tvApi } from '../../api';
+import React, { useState, useEffect } from "react";
+import SearchPresenter from "./SearchPresenter";
+import { moviesApi, tvApi } from "../../api";
 
-export default class extends React.Component {
-  state = {
-    movieResults: null,
-    tvResults: null,
-    searchTerm: '',
-    loading: false,
-    error: null,
-  };
+const SearchContainer = () => {
+  const [data, setData] = useState({
+    movieResults: [],
+    tvResults: [],
+  });
+  const [view, setView] = useState({
+    movie: true,
+    tv: true,
+  });
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
 
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const { searchTerm } = this.state;
-    if (searchTerm !== '') {
-      this.searchByTerm();
+    if (search !== "") {
+      searchByTerm();
     }
   };
 
-  updateTerm = (event) => {
+  const updateTerm = (event) => {
     const {
       target: { value },
     } = event;
-    this.setState({
-      searchTerm: value,
-    });
+    setSearch(value);
   };
 
-  searchByTerm = async () => {
-    const { searchTerm } = this.state;
-    this.setState({ loading: true });
+  const searchByTerm = async () => {
+    setLoading(true);
     try {
       const {
         data: { results: movieResults },
-      } = await moviesApi.search(searchTerm);
+      } = await moviesApi.search(search);
       const {
         data: { results: tvResults },
-      } = await tvApi.search(searchTerm);
-      this.setState({
-        movieResults,
-        tvResults,
+      } = await tvApi.search(search);
+      setData({
+        movieResults: [...data.movieResults, ...movieResults],
+        tvResults: [...data.tvResults, ...tvResults],
       });
     } catch {
-      this.setState({ error: "Can't find results." });
+      setError("Can't find results.");
     } finally {
-      this.setState({ loading: false });
+      setLoading(false);
     }
   };
 
-  render() {
-    const { movieResults, tvResults, searchTerm, loading, error } = this.state;
-    return (
-      <SearchPresenter
-        movieResults={movieResults}
-        tvResults={tvResults}
-        searchTerm={searchTerm}
-        loading={loading}
-        error={error}
-        handleSubmit={this.handleSubmit}
-        updateTerm={this.updateTerm}
-      />
-    );
-  }
-}
+  const viewMode = {
+    movieView: () => setView({ ...view, movie: view.movie ? false : true }),
+    tvView: () => setView({ ...view, tv: view.tv ? false : true }),
+  };
+
+  return (
+    <SearchPresenter
+      searchTerm={search}
+      loading={loading}
+      error={error}
+      handleSubmit={handleSubmit}
+      updateTerm={updateTerm}
+      viewFunc={viewMode}
+      view={view}
+      {...data}
+    />
+  );
+};
+
+export default SearchContainer;

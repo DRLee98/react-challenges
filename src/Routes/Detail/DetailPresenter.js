@@ -284,7 +284,11 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
         <title>{result.title ? result.title : result.name} | Nomflix</title>
       </Helmet>
       <Backdrop
-        bgImage={`https://image.tmdb.org/t/p/original${result.backdrop_path}`}
+        bgImage={
+          result.backdrop_path
+            ? `https://image.tmdb.org/t/p/original${result.backdrop_path}`
+            : null
+        }
       />
       <Content>
         <Cover
@@ -339,7 +343,7 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
               ) : null}
               <Divider>•</Divider>
               <Icon>
-                <i class="fas fa-star"></i>
+                <i className="fas fa-star"></i>
               </Icon>
               <Item> {result.vote_average}</Item>
               <RatingMax>/10 </RatingMax>
@@ -365,18 +369,18 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
           {result.videos.results.length >= 1 && (
             <VideoContainer>
               <LeftButton>
-                <i onClick={handleClick} class="fas fa-chevron-left"></i>
+                <i onClick={handleClick} className="fas fa-chevron-left"></i>
               </LeftButton>
               <VideoBox>
                 {result.videos.results.map((video) => (
                   <Video
-                    key={video.id}
+                    key={video.id + Date.now()}
                     src={`https://www.youtube.com/embed/${video.key}`}
                   ></Video>
                 ))}
               </VideoBox>
               <RightButton>
-                <i onClick={handleClick} class="fas fa-chevron-right"></i>
+                <i onClick={handleClick} className="fas fa-chevron-right"></i>
               </RightButton>
             </VideoContainer>
           )}
@@ -386,15 +390,15 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
               <Title>Cast</Title>
               <CastContainer>
                 <LeftButton>
-                  <i onClick={handleClick} class="fas fa-chevron-left"></i>
+                  <i onClick={handleClick} className="fas fa-chevron-left"></i>
                 </LeftButton>
                 <CastBox>
                   {credits.cast.map((actor) => (
-                    <Profile key={actor.id} {...actor} />
+                    <Profile key={actor.id + Date.now()} {...actor} />
                   ))}
                 </CastBox>
                 <RightButton>
-                  <i onClick={handleClick} class="fas fa-chevron-right"></i>
+                  <i onClick={handleClick} className="fas fa-chevron-right"></i>
                 </RightButton>
               </CastContainer>
             </>
@@ -405,15 +409,15 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
               <Title>Seasons</Title>
               <SeasonsContainer>
                 <LeftButton>
-                  <i onClick={handleClick} class="fas fa-chevron-left"></i>
+                  <i onClick={handleClick} className="fas fa-chevron-left"></i>
                 </LeftButton>
                 <Seasons>
                   {result.seasons.map((season) => (
-                    <Season key={season.id} {...season} />
+                    <Season key={season.id + Date.now()} {...season} />
                   ))}
                 </Seasons>
                 <RightButton>
-                  <i onClick={handleClick} class="fas fa-chevron-right"></i>
+                  <i onClick={handleClick} className="fas fa-chevron-right"></i>
                 </RightButton>
               </SeasonsContainer>
             </>
@@ -425,7 +429,7 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
                   (company) =>
                     company.logo_path && (
                       <CompanyLogo
-                        key={company.id}
+                        key={company.id + Date.now()}
                         src={`https://image.tmdb.org/t/p/original${company.logo_path}`}
                       />
                     )
@@ -435,39 +439,45 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
                     (network) =>
                       network.logo_path && (
                         <CompanyLogo
-                          key={network.id}
+                          key={network.id + Date.now()}
                           src={`https://image.tmdb.org/t/p/original${network.logo_path}`}
                         />
                       )
                   )}
               </LogoContainer>
               <CompanyList>
-                {result.production_companies.map((company, index) =>
-                  index === result.production_companies.length - 1 ? (
-                    <Company key={company.id}>{company.name}</Company>
+                {result.production_companies.map((company, i) =>
+                  i === result.production_companies.length - 1 ? (
+                    <Company key={company.id + Date.now()}>
+                      {company.name}
+                    </Company>
                   ) : (
                     <>
-                      <Company key={company.id}>{company.name}</Company>
-                      <Divider>•</Divider>
+                      <Company key={company.id + Date.now()}>
+                        {company.name}
+                      </Company>
+                      <Divider key={Date.now()}>•</Divider>
                     </>
                   )
                 )}
                 {result.networks &&
                   result.networks.map((network) => (
                     <>
-                      <Divider>•</Divider>
-                      <Company key={network.id}>{network.name}</Company>
+                      <Divider key={Date.now()}>•</Divider>
+                      <Company key={network.id + Date.now()}>
+                        {network.name}
+                      </Company>
                     </>
                   ))}
               </CompanyList>
             </CompaniesContainer>
             <CountriesContainer>
               {result.production_countries
-                ? result.production_countries.map((country, i) => (
-                    <Country key={i}>{country.name}</Country>
+                ? result.production_countries.map((country) => (
+                    <Country key={Date.now()}>{country.name}</Country>
                   ))
-                : result.origin_country.map((country, i) => (
-                    <Country key={i}>{country}</Country>
+                : result.origin_country.map((country) => (
+                    <Country key={Date.now()}>{country}</Country>
                   ))}
             </CountriesContainer>
           </ProductionContainer>
@@ -478,6 +488,7 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
 
 DetailPresenter.propTypes = {
   result: PropTypes.object,
+  credits: PropTypes.object,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
 };

@@ -52,3 +52,5 @@ export const tvApi = {
 };
 
 export const collection = (id) => api.get(`collection/${id}`);
+
+export const person = (id) => api.get(`person/${id}`);

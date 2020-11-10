@@ -52,9 +52,12 @@ const HomeContainer = () => {
   };
 
   const viewMode = {
-    nowPlayingView: () => setView({ ...view, nowPlaying: view.nowPlaying ? false : true }),
-    upcomingView: () => setView({ ...view, upcoming: view.upcoming ? false : true }),
-    popularView: () => setView({ ...view, popular: view.popular ? false : true }),
+    nowPlayingView: () =>
+      setView({ ...view, nowPlaying: view.nowPlaying ? false : true }),
+    upcomingView: () =>
+      setView({ ...view, upcoming: view.upcoming ? false : true }),
+    popularView: () =>
+      setView({ ...view, popular: view.popular ? false : true }),
   };
 
   useEffect(() => {
@@ -62,7 +65,14 @@ const HomeContainer = () => {
   }, [page]);
 
   return (
-    <HomePresenter loading={loading} error={error} pageFunc={nextPage} viewFunc={viewMode} view={view} {...data} />
+    <HomePresenter
+      loading={loading}
+      error={error}
+      pageFunc={nextPage}
+      viewFunc={viewMode}
+      view={view}
+      {...data}
+    />
   );
 };
 

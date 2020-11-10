@@ -39,6 +39,8 @@ const TVPresenter = ({
   loading,
   error,
   pageFunc,
+  viewFunc,
+  view,
 }) => (
   <>
     <Helmet>
@@ -49,7 +51,11 @@ const TVPresenter = ({
     ) : (
       <Container>
         {topRated && topRated.length > 0 && (
-          <Section title="Top Rated Shows">
+          <Section
+            title="Top Rated Shows"
+            view={view.topRated}
+            viewFunc={viewFunc.topRatedView}
+          >
             {topRated.map((show) => (
               <Poster
                 key={show.id}
@@ -62,13 +68,17 @@ const TVPresenter = ({
             ))}
             <NextPage>
               <Icon>
-                <i onClick={pageFunc.topRatedPage} class="fas fa-plus"></i>
+                <i onClick={pageFunc.topRatedPage} className="fas fa-plus"></i>
               </Icon>
             </NextPage>
           </Section>
         )}
         {popular && popular.length > 0 && (
-          <Section title="Popular Shows">
+          <Section
+            title="Popular Shows"
+            view={view.popular}
+            viewFunc={viewFunc.popularView}
+          >
             {popular.map((show) => (
               <Poster
                 key={show.id}
@@ -81,13 +91,17 @@ const TVPresenter = ({
             ))}
             <NextPage>
               <Icon>
-                <i onClick={pageFunc.popularPage} class="fas fa-plus"></i>
+                <i onClick={pageFunc.popularPage} className="fas fa-plus"></i>
               </Icon>
             </NextPage>
           </Section>
         )}
         {airingToday && airingToday.length > 0 && (
-          <Section title="Airing Today">
+          <Section
+            title="Airing Today"
+            view={view.airingToday}
+            viewFunc={viewFunc.airingTodayView}
+          >
             {airingToday.map((show) => (
               <Poster
                 key={show.id}
@@ -100,7 +114,10 @@ const TVPresenter = ({
             ))}
             <NextPage>
               <Icon>
-                <i onClick={pageFunc.airingTodayPage} class="fas fa-plus"></i>
+                <i
+                  onClick={pageFunc.airingTodayPage}
+                  className="fas fa-plus"
+                ></i>
               </Icon>
             </NextPage>
           </Section>
@@ -117,6 +134,9 @@ TVPresenter.propTypes = {
   airingToday: PropTypes.array,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
+  pageFunc: PropTypes.object,
+  viewFunc: PropTypes.object,
+  view: PropTypes.object,
 };
 
 export default TVPresenter;

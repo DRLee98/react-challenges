@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
@@ -41,21 +42,26 @@ const Container = styled.div`
   }
 `;
 
-const Profile = ({ profile_path, character, name }) => (
+const Profile = ({ profile_path, character, name, id }) => (
   <Container>
-    <Cover
-      src={
-        profile_path ? `https://image.tmdb.org/t/p/original${profile_path}` : require("assets/no_poster.jpg").default
-      }
-    />
-    <InfoBox>
-      <Character>{character}</Character>
-      <Actor>{name}</Actor>
-    </InfoBox>
+    <Link to={`/person/${id}`}>
+      <Cover
+        src={
+          profile_path
+            ? `https://image.tmdb.org/t/p/original${profile_path}`
+            : require("assets/no_poster.jpg").default
+        }
+      />
+      <InfoBox>
+        <Character>{character}</Character>
+        <Actor>{name}</Actor>
+      </InfoBox>
+    </Link>
   </Container>
 );
 
 Profile.propTypes = {
+  id: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   character: PropTypes.string.isRequired,
   profile_path: PropTypes.string,

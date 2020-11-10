@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
+import { handleBack } from "../func";
 
 const Header = styled.header`
   color: white;
@@ -11,6 +12,7 @@ const Header = styled.header`
   height: 50px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: rgba(20, 20, 20, 0.8);
   z-index: 10;
   box-shadow: 0px 1px 5px 2px rgba(0, 0, 0, 0.8);
@@ -41,6 +43,12 @@ const SLink = styled(Link)`
   font-weight: 700;
 `;
 
+const Back = styled.div`
+  margin: 0 30px;
+  font-size: 18px;
+  cursor: pointer;
+`;
+
 export default withRouter(({ location: { pathname } }) => (
   <Header>
     <List>
@@ -54,5 +62,8 @@ export default withRouter(({ location: { pathname } }) => (
         <SLink to="/search">Search</SLink>
       </Item>
     </List>
+    <Back>
+      <i className="fas fa-undo-alt" onClick={handleBack}></i>
+    </Back>
   </Header>
 ));

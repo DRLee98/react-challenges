@@ -27,13 +27,6 @@ export const handleClick = (e) => {
   }
 };
 
-export let toggle = true;
-
-export const viewHandle = () => {
-  if (toggle) {
-    toggle = false;
-  } else {
-    toggle = true;
-  }
-  return toggle;
+export const handleBack = () => {
+  history.back();
 };

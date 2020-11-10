@@ -12,11 +12,13 @@ const Container = styled.div`
   width: 250px;
 `;
 
-const Cover = styled.img`
-  width: 100%;
-  height: 100%;
+const Cover = styled.div`
+  width: 250px;
+  height: 400px;
+  background-image: url(${(props) => props.bgImage});
   background-position: center center;
   background-size: cover;
+  border-radius: 5px;
   opacity: 1;
   transition: opacity 0.2s linear;
 `;
@@ -71,17 +73,31 @@ const CoverContainer = styled.div`
   }
 `;
 
-const Season = ({ air_date, episode_count, name, overview, poster_path, season_number, location: { pathname } }) => (
+const Season = ({
+  air_date,
+  episode_count,
+  name,
+  overview,
+  poster_path,
+  season_number,
+  location: { pathname },
+}) => (
   <Container>
     <Link to={`${pathname}/season/${season_number}`}>
       <CoverContainer>
         <Cover
-          src={
-            poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : require("assets/no_poster.jpg").default
+          bgImage={
+            poster_path
+              ? `https://image.tmdb.org/t/p/original${poster_path}`
+              : require("assets/no_poster.jpg").default
           }
         ></Cover>
         <ItemContainer>
-          <Overview>{overview.length > 150 ? `${overview.substring(0, 150)}...` : overview}</Overview>
+          <Overview>
+            {overview.length > 150
+              ? `${overview.substring(0, 150)}...`
+              : overview}
+          </Overview>
           <Box>
             <Title>{name}</Title>
             <Item>{air_date && air_date.substring(0, 4)}</Item>
@@ -99,7 +115,6 @@ Season.propTypes = {
   name: PropTypes.string.isRequired,
   air_date: PropTypes.string,
   poster_path: PropTypes.string,
-  vote_average: PropTypes.number,
   overview: PropTypes.string,
 };
 

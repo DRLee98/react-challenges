@@ -23,20 +23,38 @@ const Input = styled.input`
   width: 100%;
 `;
 
-const SearchPresenter = ({ movieResults, tvResults, loading, searchTerm, handleSubmit, error, updateTerm }) => (
+const SearchPresenter = ({
+  movieResults,
+  tvResults,
+  loading,
+  searchTerm,
+  handleSubmit,
+  error,
+  updateTerm,
+  viewFunc,
+  view,
+}) => (
   <Container>
     <Helmet>
       <title>Search | Nomflix</title>
     </Helmet>
     <Form onSubmit={handleSubmit}>
-      <Input placeholder="Search Movies or TV Shows..." value={searchTerm} onChange={updateTerm} />
+      <Input
+        placeholder="Search Movies or TV Shows..."
+        value={searchTerm}
+        onChange={updateTerm}
+      />
     </Form>
     {loading ? (
       <Loader />
     ) : (
       <>
         {movieResults && movieResults.length > 0 && (
-          <Section title="Movie Results">
+          <Section
+            title="Movie Results"
+            view={view.movie}
+            viewFunc={viewFunc.movieView}
+          >
             {movieResults.map((movie) => (
               <Poster
                 key={movie.id}
@@ -44,14 +62,20 @@ const SearchPresenter = ({ movieResults, tvResults, loading, searchTerm, handleS
                 imageUrl={movie.poster_path}
                 title={movie.title}
                 rating={movie.vote_average}
-                year={movie.release_date.substring(0, 4)}
+                year={
+                  movie.release_date ? movie.release_date.substring(0, 4) : ""
+                }
                 isMovie={true}
               />
             ))}
           </Section>
         )}
         {tvResults && tvResults.length > 0 && (
-          <Section title="TV Show Results">
+          <Section
+            title="TV Show Results"
+            view={view.tv}
+            viewFunc={viewFunc.tvView}
+          >
             {tvResults.map((show) => (
               <Poster
                 key={show.id}
@@ -59,7 +83,9 @@ const SearchPresenter = ({ movieResults, tvResults, loading, searchTerm, handleS
                 imageUrl={show.poster_path}
                 title={show.name}
                 rating={show.vote_average}
-                year={show.first_air_date.substring(0, 4)}
+                year={
+                  show.first_air_date ? show.first_air_date.substring(0, 4) : ""
+                }
               />
             ))}
           </Section>
@@ -67,9 +93,12 @@ const SearchPresenter = ({ movieResults, tvResults, loading, searchTerm, handleS
       </>
     )}
     {error && <Message color="#e74c3c" text={error} />}
-    {tvResults && movieResults && tvResults.length === 0 && movieResults.length === 0 && (
-      <Message text="Nothing found" color="#95a5a6" />
-    )}
+    {tvResults &&
+      movieResults &&
+      tvResults.length === 0 &&
+      movieResults.length === 0 && (
+        <Message text="Nothing found" color="#95a5a6" />
+      )}
   </Container>
 );
 
@@ -81,6 +110,8 @@ SearchPresenter.propTypes = {
   loading: PropTypes.bool.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   updateTerm: PropTypes.func.isRequired,
+  viewFunc: PropTypes.object,
+  view: PropTypes.object,
 };
 
 export default SearchPresenter;

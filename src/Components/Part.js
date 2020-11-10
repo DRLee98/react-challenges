@@ -43,6 +43,31 @@ const Item = styled.span`
   font-size: 17px;
 `;
 
+const VoteAvg = styled.span`
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 2;
+`;
+
+const VoteMax = styled.span`
+  opacity: 0.5;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 2;
+`;
+
+const VoteCount = styled.span`
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 2;
+  color: goldenrod;
+`;
+
+const Icon = styled.span`
+  color: yellow;
+  font-size: 12px;
+`;
+
 const Overview = styled.p`
   font-size: 18px;
   line-height: 1.5;
@@ -68,13 +93,23 @@ const CoverContainer = styled.div`
   }
 `;
 
-const Part = ({ id, title, release_date, poster_path, vote_average, overview }) => (
+const Part = ({
+  id,
+  title,
+  release_date,
+  poster_path,
+  vote_average,
+  vote_count,
+  overview,
+}) => (
   <Container>
     <SLink to={`/movie/${id}`}>
       <CoverContainer>
         <Cover
           bgImage={
-            poster_path ? `https://image.tmdb.org/t/p/original${poster_path}` : require("assets/no_poster.jpg").default
+            poster_path
+              ? `https://image.tmdb.org/t/p/original${poster_path}`
+              : require("assets/no_poster.jpg").default
           }
         />
         <Overview>{overview}</Overview>
@@ -83,10 +118,12 @@ const Part = ({ id, title, release_date, poster_path, vote_average, overview }) 
       <ItemContainer>
         <Item>{release_date.substring(0, 4)}</Item>
         <Item>
-          <span role="img" aria-label="rating">
-            ⭐️
-          </span>{" "}
-          {vote_average}/10
+          <Icon>
+            <i className="fas fa-star"></i>
+          </Icon>
+          <VoteAvg> {vote_average}</VoteAvg>
+          <VoteMax>/10 </VoteMax>
+          <VoteCount>({vote_count})</VoteCount>
         </Item>
       </ItemContainer>
     </SLink>

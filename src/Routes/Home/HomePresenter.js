@@ -14,6 +14,7 @@ const Container = styled.div`
 
 const NextPage = styled.div`
   width: 200px;
+  height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,7 +33,16 @@ const Icon = styled.div`
   }
 `;
 
-const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error, pageFunc, viewFunc, view }) => (
+const HomePresenter = ({
+  nowPlaying,
+  popular,
+  upcoming,
+  loading,
+  error,
+  pageFunc,
+  viewFunc,
+  view,
+}) => (
   <>
     <Helmet>
       <title>Movies | Nomflix</title>
@@ -45,10 +55,14 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error, pageFunc
           <title>Movies | Nomflix</title>
         </Helmet>
         {nowPlaying && nowPlaying.length > 0 && (
-          <Section title="Now Playing" view={view.nowPlaying} viewFunc={viewFunc.nowPlayingView}>
-            {nowPlaying.map((movie) => (
+          <Section
+            title="Now Playing"
+            view={view.nowPlaying}
+            viewFunc={viewFunc.nowPlayingView}
+          >
+            {nowPlaying.map((movie, i) => (
               <Poster
-                key={movie.id}
+                key={movie.id + i}
                 id={movie.id}
                 imageUrl={movie.poster_path}
                 title={movie.title}
@@ -59,16 +73,23 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error, pageFunc
             ))}
             <NextPage>
               <Icon>
-                <i onClick={pageFunc.nowPlayingPage} class="fas fa-plus"></i>
+                <i
+                  onClick={pageFunc.nowPlayingPage}
+                  className="fas fa-plus"
+                ></i>
               </Icon>
             </NextPage>
           </Section>
         )}
         {upcoming && upcoming.length > 0 && (
-          <Section title="Upcoming Movies" view={view.upcoming} viewFunc={viewFunc.upcomingView}>
-            {upcoming.map((movie) => (
+          <Section
+            title="Upcoming Movies"
+            view={view.upcoming}
+            viewFunc={viewFunc.upcomingView}
+          >
+            {upcoming.map((movie, i) => (
               <Poster
-                key={movie.id}
+                key={movie.id + i}
                 id={movie.id}
                 imageUrl={movie.poster_path}
                 title={movie.title}
@@ -79,16 +100,20 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error, pageFunc
             ))}
             <NextPage>
               <Icon>
-                <i onClick={pageFunc.upcomingPage} class="fas fa-plus"></i>
+                <i onClick={pageFunc.upcomingPage} className="fas fa-plus"></i>
               </Icon>
             </NextPage>
           </Section>
         )}
         {popular && popular.length > 0 && (
-          <Section title="Popular Movies" view={view.popular} viewFunc={viewFunc.popularView}>
-            {popular.map((movie) => (
+          <Section
+            title="Popular Movies"
+            view={view.popular}
+            viewFunc={viewFunc.popularView}
+          >
+            {popular.map((movie, i) => (
               <Poster
-                key={movie.id}
+                key={movie.id + i}
                 id={movie.id}
                 imageUrl={movie.poster_path}
                 title={movie.title}
@@ -99,7 +124,7 @@ const HomePresenter = ({ nowPlaying, popular, upcoming, loading, error, pageFunc
             ))}
             <NextPage>
               <Icon>
-                <i onClick={pageFunc.popularPage} class="fas fa-plus"></i>
+                <i onClick={pageFunc.popularPage} className="fas fa-plus"></i>
               </Icon>
             </NextPage>
           </Section>
@@ -116,6 +141,9 @@ HomePresenter.propTypes = {
   upcoming: PropTypes.array,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
+  pageFunc: PropTypes.object,
+  viewFunc: PropTypes.object,
+  view: PropTypes.object,
 };
 
 export default HomePresenter;

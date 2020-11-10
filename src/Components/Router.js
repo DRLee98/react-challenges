@@ -12,6 +12,7 @@ import Search from "Routes/Search";
 import Detail from "Routes/Detail";
 import Collection from "Routes/Collection";
 import Season from "Routes/Season";
+import Person from "Routes/Person";
 import Header from "Components/Header";
 
 export default () => (
@@ -26,6 +27,7 @@ export default () => (
         <Route path="/show/:id" exact component={Detail} />
         <Route path="/collection/:id" component={Collection} />
         <Route path="/show/:id/season/:season" component={Season} />
+        <Route path="/person/:id" exact component={Person} />
         <Redirect from="*" to="/" />
       </Switch>
     </>

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { handleClick, viewHandle } from "../func";
+import { handleClick } from "../func";
 
 const Container = styled.div`
   :not(:last-child) {
@@ -12,6 +12,12 @@ const Container = styled.div`
 const Title = styled.span`
   font-size: 30px;
   font-weight: 900;
+`;
+
+const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 200px);
+  grid-gap: 25px;
 `;
 
 const PosterContainer = styled.div`
@@ -93,25 +99,33 @@ const Section = ({ title, children, viewFunc, view }) => (
     <TitleBox>
       <Title>{title}</Title>
       <Icon>
-        <i onClick={viewFunc} class="fas fa-eye"></i>
-        {console.log(view)}
+        <i onClick={viewFunc} className="fas fa-eye"></i>
       </Icon>
     </TitleBox>
-    <PosterContainer>
-      <LeftButton>
-        <i onClick={handleClick} class="fas fa-chevron-left"></i>
-      </LeftButton>
-      <PosterBox>{children}</PosterBox>
-      <RightButton>
-        <i onClick={handleClick} class="fas fa-chevron-right"></i>
-      </RightButton>
-    </PosterContainer>
+    {view ? (
+      <PosterContainer>
+        <LeftButton>
+          <i onClick={handleClick} className="fas fa-chevron-left"></i>
+        </LeftButton>
+        <PosterBox>{children}</PosterBox>
+        <RightButton>
+          <i onClick={handleClick} className="fas fa-chevron-right"></i>
+        </RightButton>
+      </PosterContainer>
+    ) : (
+      <Grid>{children}</Grid>
+    )}
   </Container>
 );
 
 Section.propTypes = {
   title: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  viewFunc: PropTypes.func,
+  view: PropTypes.bool,
 };
 
 export default Section;
