@@ -1,9 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-anonymous-default-export */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchPresenter from "./SearchPresenter";
 import { moviesApi, tvApi } from "../../api";
 
-const SearchContainer = () => {
+const SearchContainer = ({
+  match: {
+    params: { word },
+  },
+}) => {
+  console.log(word);
   const [data, setData] = useState({
     movieResults: [],
     tvResults: [],
@@ -12,33 +18,18 @@ const SearchContainer = () => {
     movie: true,
     tv: true,
   });
-  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (search !== "") {
-      searchByTerm();
-    }
-  };
-
-  const updateTerm = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setSearch(value);
-  };
 
   const searchByTerm = async () => {
     setLoading(true);
     try {
       const {
         data: { results: movieResults },
-      } = await moviesApi.search(search);
+      } = await moviesApi.search(word);
       const {
         data: { results: tvResults },
-      } = await tvApi.search(search);
+      } = await tvApi.search(word);
       setData({
         movieResults: [...data.movieResults, ...movieResults],
         tvResults: [...data.tvResults, ...tvResults],
@@ -55,13 +46,14 @@ const SearchContainer = () => {
     tvView: () => setView({ ...view, tv: view.tv ? false : true }),
   };
 
+  useEffect(() => {
+    searchByTerm();
+  }, [word]);
+
   return (
     <SearchPresenter
-      searchTerm={search}
       loading={loading}
       error={error}
-      handleSubmit={handleSubmit}
-      updateTerm={updateTerm}
       viewFunc={viewMode}
       view={view}
       {...data}

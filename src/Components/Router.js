@@ -22,7 +22,7 @@ export default () => (
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/tv" component={TV} />
-        <Route path="/search" component={Search} />
+        <Route path="/search/:word" component={Search} />
         <Route path="/movie/:id" component={Detail} />
         <Route path="/show/:id" exact component={Detail} />
         <Route path="/collection/:id" component={Collection} />

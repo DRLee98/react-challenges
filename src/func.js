@@ -30,3 +30,10 @@ export const handleClick = (e) => {
 export const handleBack = () => {
   window.history.back();
 };
+
+export const handleSubmit = (event) => {
+  event.preventDefault();
+  const { target } = event;
+  window.location.hash = `#/search/${target[0].value}`;
+  target[0].value = "";
+};
