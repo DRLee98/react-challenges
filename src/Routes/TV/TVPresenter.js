@@ -14,6 +14,7 @@ const Container = styled.div`
 
 const NextPage = styled.div`
   width: 200px;
+  height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;

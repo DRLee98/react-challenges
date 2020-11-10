@@ -228,6 +228,35 @@ const Country = styled.li`
   margin-top: 10px;
 `;
 
+const TitleBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const ViewIcon = styled.div`
+  cursor: pointer;
+  font-size: 28px;
+  padding: 8px;
+  border-radius: 50%;
+  transition: all 0.5s ease;
+  &:hover {
+    background-color: rgb(255 255 255 / 0.3);
+  }
+`;
+
+const CastGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 150px);
+  grid-gap: 15px;
+`;
+
+const SeasonGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 250px);
+  grid-gap: 10px;
+`;
+
 const LeftButton = styled.button`
   all: unset;
   position: absolute;
@@ -268,7 +297,7 @@ const RightButton = styled.button`
   }
 `;
 
-const DetailPresenter = ({ result, credits, loading, error }) =>
+const DetailPresenter = ({ result, credits, loading, error, viewFunc, view }) =>
   loading ? (
     <>
       <Helmet>
@@ -387,39 +416,77 @@ const DetailPresenter = ({ result, credits, loading, error }) =>
 
           {credits.cast.length > 0 && (
             <>
-              <Title>Cast</Title>
-              <CastContainer>
-                <LeftButton>
-                  <i onClick={handleClick} className="fas fa-chevron-left"></i>
-                </LeftButton>
-                <CastBox>
+              <TitleBox>
+                <Title>Cast</Title>
+                <ViewIcon>
+                  <i onClick={viewFunc.castView} className="fas fa-eye"></i>
+                </ViewIcon>
+              </TitleBox>
+              {view.cast ? (
+                <CastContainer>
+                  <LeftButton>
+                    <i
+                      onClick={handleClick}
+                      className="fas fa-chevron-left"
+                    ></i>
+                  </LeftButton>
+                  <CastBox>
+                    {credits.cast.map((actor) => (
+                      <Profile key={actor.id + Date.now()} {...actor} />
+                    ))}
+                  </CastBox>
+                  <RightButton>
+                    <i
+                      onClick={handleClick}
+                      className="fas fa-chevron-right"
+                    ></i>
+                  </RightButton>
+                </CastContainer>
+              ) : (
+                <CastGrid>
                   {credits.cast.map((actor) => (
                     <Profile key={actor.id + Date.now()} {...actor} />
                   ))}
-                </CastBox>
-                <RightButton>
-                  <i onClick={handleClick} className="fas fa-chevron-right"></i>
-                </RightButton>
-              </CastContainer>
+                </CastGrid>
+              )}
             </>
           )}
 
           {result.seasons && result.seasons.length > 1 && (
             <>
-              <Title>Seasons</Title>
-              <SeasonsContainer>
-                <LeftButton>
-                  <i onClick={handleClick} className="fas fa-chevron-left"></i>
-                </LeftButton>
-                <Seasons>
+              <TitleBox>
+                <Title>Seasons</Title>
+                <ViewIcon>
+                  <i onClick={viewFunc.seasonView} className="fas fa-eye"></i>
+                </ViewIcon>
+              </TitleBox>
+              {view.season ? (
+                <SeasonsContainer>
+                  <LeftButton>
+                    <i
+                      onClick={handleClick}
+                      className="fas fa-chevron-left"
+                    ></i>
+                  </LeftButton>
+                  <Seasons>
+                    {result.seasons.map((season) => (
+                      <Season key={season.id + Date.now()} {...season} />
+                    ))}
+                  </Seasons>
+                  <RightButton>
+                    <i
+                      onClick={handleClick}
+                      className="fas fa-chevron-right"
+                    ></i>
+                  </RightButton>
+                </SeasonsContainer>
+              ) : (
+                <SeasonGrid>
                   {result.seasons.map((season) => (
                     <Season key={season.id + Date.now()} {...season} />
                   ))}
-                </Seasons>
-                <RightButton>
-                  <i onClick={handleClick} className="fas fa-chevron-right"></i>
-                </RightButton>
-              </SeasonsContainer>
+                </SeasonGrid>
+              )}
             </>
           )}
           <ProductionContainer>
@@ -491,6 +558,8 @@ DetailPresenter.propTypes = {
   credits: PropTypes.object,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
+  viewFunc: PropTypes.object,
+  view: PropTypes.object,
 };
 
 export default DetailPresenter;

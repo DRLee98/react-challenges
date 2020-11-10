@@ -58,7 +58,7 @@ const Collections = styled.div`
   width: 100%;
 `;
 
-const DetailPresenter = ({ data, loading, error }) =>
+const CollectionPresenter = ({ data, loading, error }) =>
   loading ? (
     <>
       <Helmet>
@@ -71,7 +71,9 @@ const DetailPresenter = ({ data, loading, error }) =>
       <Helmet>
         <title>{data.name} | Nomflix</title>
       </Helmet>
-      <Backdrop bgImage={`https://image.tmdb.org/t/p/original${data.backdrop_path}`} />
+      <Backdrop
+        bgImage={`https://image.tmdb.org/t/p/original${data.backdrop_path}`}
+      />
       <Content>
         <Title>{data.name}</Title>
         <Overview>{data.overview}</Overview>
@@ -84,10 +86,10 @@ const DetailPresenter = ({ data, loading, error }) =>
     </Container>
   );
 
-DetailPresenter.propTypes = {
+CollectionPresenter.propTypes = {
   data: PropTypes.object,
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
 };
 
-export default DetailPresenter;
+export default CollectionPresenter;

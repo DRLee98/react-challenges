@@ -114,7 +114,9 @@ const Img = styled.div`
 export default withRouter(({ location: { pathname } }) => (
   <Header>
     <List>
-      <Img bgUrl={require("assets/icons8-film-reel-64.png").default} />
+      <Link to="/">
+        <Img bgUrl={require("assets/icons8-film-reel-64.png").default} />
+      </Link>
       <Item current={pathname === "/"}>
         <SLink to="/">Movies</SLink>
       </Item>

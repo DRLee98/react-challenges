@@ -1,37 +1,38 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable import/no-anonymous-default-export */
-import React from "react";
+import React, { useState, useEffect } from "react";
 import DetailPresenter from "./DetailPresenter";
 import { moviesApi, tvApi } from "../../api";
 
-export default class extends React.Component {
-  constructor(props) {
-    super(props);
-    const {
-      location: { pathname },
-    } = props;
-    this.state = {
-      result: null,
-      credits: null,
-      error: null,
-      loading: true,
-      isMovie: pathname.includes("/movie/"),
-    };
+const DetailContainer = ({
+  match: {
+    params: { id },
+  },
+}) => {
+  const [data, setData] = useState({
+    result: null,
+    credits: null,
+  });
+  const [view, setView] = useState({
+    cast: true,
+    season: true,
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState();
+
+  let {
+    location: { hash },
+  } = window;
+
+  const isMovie = hash.includes("movie");
+  const parsedId = parseInt(id);
+  if (isNaN(parsedId)) {
+    hash = "/";
   }
 
-  async componentDidMount() {
-    const {
-      match: {
-        params: { id },
-      },
-      history: { push },
-    } = this.props;
-    const { isMovie } = this.state;
-    const parsedId = parseInt(id);
-    if (isNaN(parsedId)) {
-      return push("/");
-    }
-    let result = null;
-    let credits = null;
+  let result = null;
+  let credits = null;
+  const LoadData = async () => {
     try {
       if (isMovie) {
         ({ data: result } = await moviesApi.movieDetail(parsedId));
@@ -41,21 +42,31 @@ export default class extends React.Component {
         ({ data: credits } = await tvApi.showCredits(parsedId));
       }
     } catch {
-      this.setState({ error: "Can't find anything." });
+      setError("Can't find anything.");
     } finally {
-      this.setState({ loading: false, result, credits });
+      setData({ result, credits });
+      setLoading(false);
     }
-  }
+  };
 
-  render() {
-    const { result, credits, error, loading } = this.state;
-    return (
-      <DetailPresenter
-        result={result}
-        credits={credits}
-        error={error}
-        loading={loading}
-      />
-    );
-  }
-}
+  const viewMode = {
+    castView: () => setView({ ...view, cast: view.cast ? false : true }),
+    seasonView: () => setView({ ...view, season: view.season ? false : true }),
+  };
+
+  useEffect(() => {
+    LoadData();
+  }, []);
+
+  return (
+    <DetailPresenter
+      error={error}
+      loading={loading}
+      viewFunc={viewMode}
+      view={view}
+      {...data}
+    />
+  );
+};
+
+export default DetailContainer;

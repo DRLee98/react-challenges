@@ -53,4 +53,5 @@ export const tvApi = {
 
 export const collection = (id) => api.get(`collection/${id}`);
 
-export const person = (id) => api.get(`person/${id}`);
+export const personDetail = (id) => api.get(`person/${id}`);
+export const personCredits = (id) => api.get(`person/${id}/combined_credits`);

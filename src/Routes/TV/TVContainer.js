@@ -58,7 +58,7 @@ const TVContainer = () => {
       setView({ ...view, topRated: view.topRated ? false : true }),
     popularView: () =>
       setView({ ...view, popular: view.popular ? false : true }),
-    airingToday: () =>
+    airingTodayView: () =>
       setView({ ...view, airingToday: view.airingToday ? false : true }),
   };
 

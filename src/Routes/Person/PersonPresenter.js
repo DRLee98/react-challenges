@@ -5,6 +5,8 @@ import styled from "styled-components";
 import Helmet from "react-helmet";
 
 import Loader from "../../Components/Loader";
+import Section from "../../Components/Section";
+import Poster from "../../Components/Poster";
 
 const Container = styled.div`
   width: 100%;
@@ -74,11 +76,12 @@ const MiniTitle = styled.h4`
 `;
 
 const Biography = styled.p`
-  width: 50%;
+  width: 90%;
   font-size: 18px;
   font-weight: bold;
   color: rgb(255 255 255 / 0.7);
   line-height: 1.5;
+  margin-bottom: 25px;
 `;
 
 const HomePage = styled.a`
@@ -86,18 +89,13 @@ const HomePage = styled.a`
   color: rgb(255 255 255 / 0.7);
 `;
 
-const HomePresenter = ({
+const PersonPresenter = ({
   loading,
   error,
-  profile_path,
-  name,
-  place_of_birth,
-  known_for_department,
-  birthday,
-  deathday,
-  imdb_id,
-  homepage,
-  biography,
+  person,
+  credits,
+  viewFunc,
+  view,
 }) => (
   <>
     <Helmet>
@@ -108,47 +106,84 @@ const HomePresenter = ({
     ) : (
       <Container>
         <Helmet>
-          <title>{name} | Nomflix</title>
+          <title>{person.name} | Nomflix</title>
         </Helmet>
         <Content>
           <Cover
             bgImage={
-              profile_path
-                ? `https://image.tmdb.org/t/p/original${profile_path}`
+              person.profile_path
+                ? `https://image.tmdb.org/t/p/original${person.profile_path}`
                 : require("assets/no_poster.jpg").default
             }
           />
           <Data>
-            <Title>{name}</Title>
-            <Item>{known_for_department}</Item>
-            {imdb_id ? (
+            <Title>{person.name}</Title>
+            <Item>{person.known_for_department}</Item>
+            {person.imdb_id ? (
               <IMDb>
                 <a
-                  href={`https://www.imdb.com/title/${imdb_id}`}
+                  href={`https://www.imdb.com/title/${person.imdb_id}`}
                   target="_blank"
                 >
                   IMDb
                 </a>
               </IMDb>
             ) : null}
-            {place_of_birth ? (
+            {person.place_of_birth ? (
               <Box>
-                <Item>{place_of_birth}</Item>
+                <Item>{person.place_of_birth}</Item>
               </Box>
             ) : null}
             <Box>
-              <Item>{birthday}</Item>
-              {deathday ? <Item>~ {deathday}</Item> : null}
+              <Item>{person.birthday}</Item>
+              {person.deathday ? <Item>~ {person.deathday}</Item> : null}
             </Box>
-            {homepage ? (
+            {person.homepage ? (
               <Box>
-                <HomePage href={homepage} target="_blank">
-                  {homepage}
+                <HomePage href={person.homepage} target="_blank">
+                  {person.homepage}
                 </HomePage>
               </Box>
             ) : null}
             <MiniTitle>Biography</MiniTitle>
-            <Biography>{biography}</Biography>
+            <Biography>{person.biography}</Biography>
+            <Section
+              title="Movie"
+              view={view.movie}
+              viewFunc={viewFunc.movieView}
+            >
+              {credits.cast
+                .filter((credit) => credit.media_type === "movie")
+                .map((movie) => (
+                  <Poster
+                    key={movie.id}
+                    id={movie.id}
+                    imageUrl={movie.poster_path}
+                    title={movie.title}
+                    rating={movie.vote_average}
+                    year={
+                      movie.release_date && movie.release_date.substring(0, 4)
+                    }
+                    isMovie={true}
+                  />
+                ))}
+            </Section>
+            <Section title="TV" view={view.tv} viewFunc={viewFunc.tvView}>
+              {credits.cast
+                .filter((credit) => credit.media_type === "tv")
+                .map((show) => (
+                  <Poster
+                    key={show.id}
+                    id={show.id}
+                    imageUrl={show.poster_path}
+                    title={show.name}
+                    rating={show.vote_average}
+                    year={
+                      show.first_air_date && show.first_air_date.substring(0, 4)
+                    }
+                  />
+                ))}
+            </Section>
           </Data>
         </Content>
       </Container>
@@ -156,18 +191,12 @@ const HomePresenter = ({
   </>
 );
 
-HomePresenter.propTypes = {
+PersonPresenter.propTypes = {
   loading: PropTypes.bool.isRequired,
   error: PropTypes.string,
-  profile_path: PropTypes.string,
-  name: PropTypes.string,
-  place_of_birth: PropTypes.string,
-  known_for_department: PropTypes.string,
-  birthday: PropTypes.string,
-  deathday: PropTypes.string,
-  imdb_id: PropTypes.string,
-  homepage: PropTypes.string,
-  biography: PropTypes.string,
+  person: PropTypes.object,
+  viewFunc: PropTypes.object,
+  view: PropTypes.object,
 };
 
-export default HomePresenter;
+export default PersonPresenter;
