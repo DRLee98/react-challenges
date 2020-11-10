@@ -9,7 +9,6 @@ const SearchContainer = ({
     params: { word },
   },
 }) => {
-  console.log(word);
   const [data, setData] = useState({
     movieResults: [],
     tvResults: [],

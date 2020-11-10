@@ -46,7 +46,7 @@ const PersonContainer = ({
   useEffect(() => {
     LoadData();
   }, []);
-  console.log({ ...data });
+
   return (
     <PersonPresenter
       loading={loading}
