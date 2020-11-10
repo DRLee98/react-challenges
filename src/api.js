@@ -53,5 +53,8 @@ export const tvApi = {
 
 export const collection = (id) => api.get(`collection/${id}`);
 
-export const personDetail = (id) => api.get(`person/${id}`);
-export const personCredits = (id) => api.get(`person/${id}/combined_credits`);
+export const personApi = {
+  personDetail: (id) => api.get(`person/${id}`),
+  personMovies: (id) => api.get(`person/${id}/movie_credits`),
+  personShows: (id) => api.get(`person/${id}/tv_credits`),
+};

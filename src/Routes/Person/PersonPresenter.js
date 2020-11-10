@@ -93,7 +93,8 @@ const PersonPresenter = ({
   loading,
   error,
   person,
-  credits,
+  movies,
+  shows,
   viewFunc,
   view,
 }) => (
@@ -147,14 +148,13 @@ const PersonPresenter = ({
             ) : null}
             <MiniTitle>Biography</MiniTitle>
             <Biography>{person.biography}</Biography>
-            <Section
-              title="Movie"
-              view={view.movie}
-              viewFunc={viewFunc.movieView}
-            >
-              {credits.cast
-                .filter((credit) => credit.media_type === "movie")
-                .map((movie) => (
+            {movies.cast.length > 0 && (
+              <Section
+                title="Movie"
+                view={view.movie}
+                viewFunc={viewFunc.movieView}
+              >
+                {movies.cast.map((movie) => (
                   <Poster
                     key={movie.id}
                     id={movie.id}
@@ -167,11 +167,11 @@ const PersonPresenter = ({
                     isMovie={true}
                   />
                 ))}
-            </Section>
-            <Section title="TV" view={view.tv} viewFunc={viewFunc.tvView}>
-              {credits.cast
-                .filter((credit) => credit.media_type === "tv")
-                .map((show) => (
+              </Section>
+            )}
+            {shows.cast.length > 0 && (
+              <Section title="TV" view={view.tv} viewFunc={viewFunc.tvView}>
+                {shows.cast.map((show) => (
                   <Poster
                     key={show.id}
                     id={show.id}
@@ -183,7 +183,8 @@ const PersonPresenter = ({
                     }
                   />
                 ))}
-            </Section>
+              </Section>
+            )}
           </Data>
         </Content>
       </Container>

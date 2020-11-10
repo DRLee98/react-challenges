@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import PersonPresenter from "./PersonPresenter";
-import { personDetail, personCredits } from "api";
+import { personApi } from "api";
 
 const PersonContainer = ({
   match: {
@@ -11,7 +11,8 @@ const PersonContainer = ({
 }) => {
   const [data, setData] = useState({
     person: null,
-    credits: null,
+    movies: null,
+    shows: null,
   });
   const [view, setView] = useState({
     movie: true,
@@ -22,11 +23,13 @@ const PersonContainer = ({
 
   const LoadData = async () => {
     try {
-      const { data: person } = await personDetail(id);
-      const { data: credits } = await personCredits(id);
+      const { data: person } = await personApi.personDetail(id);
+      const { data: movies } = await personApi.personMovies(id);
+      const { data: shows } = await personApi.personShows(id);
       setData({
         person,
-        credits,
+        movies,
+        shows,
       });
     } catch {
       setError("Can't find person information.");
@@ -43,7 +46,7 @@ const PersonContainer = ({
   useEffect(() => {
     LoadData();
   }, []);
-
+  console.log({ ...data });
   return (
     <PersonPresenter
       loading={loading}
