@@ -46,6 +46,36 @@ const HomeContainer = () => {
     }
   };
 
+  const LoadNowPlaying = async () => {
+    const {
+      data: { results: nowPlaying },
+    } = await moviesApi.nowPlaying(page.nowPlaying);
+    setData({
+      ...data,
+      nowPlaying: [...data.nowPlaying, ...nowPlaying]
+    });
+  }
+
+  const LoadUpcoming = async () => {
+    const {
+      data: { results: upcoming },
+    } = await moviesApi.upcoming(page.upcoming);
+    setData({
+      ...data,
+      upcoming: [...data.upcoming, ...upcoming]
+    });
+  }
+
+  const LoadPopular = async () => {
+    const {
+      data: { results: popular },
+    } = await moviesApi.popular(page.popular);
+    setData({
+      ...data,
+      popular: [...data.popular, ...popular]
+    });
+  }
+
   const nextPage = {
     nowPlayingPage: () => setPage({ ...page, nowPlaying: page.nowPlaying + 1 }),
     upcomingPage: () => setPage({ ...page, upcoming: page.upcoming + 1 }),
@@ -54,16 +84,28 @@ const HomeContainer = () => {
 
   const viewMode = {
     nowPlayingView: () =>
-      setView({ ...view, nowPlaying: view.nowPlaying ? false : true }),
+      setView({ ...view, nowPlaying: !view.nowPlaying }),
     upcomingView: () =>
-      setView({ ...view, upcoming: view.upcoming ? false : true }),
+      setView({ ...view, upcoming: !view.upcoming }),
     popularView: () =>
-      setView({ ...view, popular: view.popular ? false : true }),
+      setView({ ...view, popular: !view.popular }),
   };
 
   useEffect(() => {
     LoadData();
-  }, [page]);
+  }, []);
+
+  useEffect(() => {
+    LoadNowPlaying();
+  }, [page.nowPlaying]);
+
+  useEffect(() => {
+    LoadUpcoming();
+  }, [page.upcoming]);
+
+  useEffect(() => {
+    LoadPopular();
+  }, [page.popular]);
 
   return (
     <HomePresenter
