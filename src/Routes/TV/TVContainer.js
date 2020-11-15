@@ -46,6 +46,36 @@ const TVContainer = () => {
     }
   };
 
+  const LoadTopRated = async () => {
+    const {
+      data: { results: topRated },
+    } = await tvApi.topRated(page.topRated);
+    setData({
+      ...data,
+      topRated: [...data.topRated, ...topRated]
+    });
+  }
+
+  const LoadPopular = async () => {
+    const {
+      data: { results: popular },
+    } = await tvApi.popular(page.popular);
+    setData({
+      ...data,
+      popular: [...data.popular, ...popular]
+    });
+  }
+
+  const LoadAiringToday = async () => {
+    const {
+      data: { results: airingToday },
+    } = await tvApi.airingToday(page.airingToday);
+    setData({
+      ...data,
+      airingToday: [...data.airingToday, ...airingToday]
+    });
+  }
+
   const nextPage = {
     topRatedPage: () => setPage({ ...page, topRated: page.topRated + 1 }),
     popularPage: () => setPage({ ...page, popular: page.popular + 1 }),
@@ -64,7 +94,19 @@ const TVContainer = () => {
 
   useEffect(() => {
     LoadData();
-  }, [page]);
+  }, []);
+
+  useEffect(() => {
+    LoadTopRated();
+  }, [page.topRated]);
+
+  useEffect(() => {
+    LoadPopular();
+  }, [page.popular]);
+
+  useEffect(() => {
+    LoadAiringToday();
+  }, [page.airingToday]);
 
   return (
     <TVPresenter
