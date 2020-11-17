@@ -23,22 +23,11 @@ const TVContainer = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState();
 
+  const [targetData, setTargetData] = useState();
+
   const LoadData = async () => {
     try {
-      const {
-        data: { results: topRated },
-      } = await tvApi.topRated(page.topRated);
-      const {
-        data: { results: popular },
-      } = await tvApi.popular(page.popular);
-      const {
-        data: { results: airingToday },
-      } = await tvApi.airingToday(page.airingToday);
-      setData({
-        topRated: [...data.topRated, ...topRated],
-        popular: [...data.popular, ...popular],
-        airingToday: [...data.airingToday, ...airingToday],
-      });
+      LoadPages(targetData);
     } catch {
       setError("Can't find movie information.");
     } finally {
@@ -46,50 +35,60 @@ const TVContainer = () => {
     }
   };
 
-  const LoadTopRated = async () => {
+  const LoadPages = async (target) => {
     const {
       data: { results: topRated },
     } = await tvApi.topRated(page.topRated);
-    setData({
-      ...data,
-      topRated: [...data.topRated, ...topRated]
-    });
-  }
-
-  const LoadPopular = async () => {
     const {
       data: { results: popular },
     } = await tvApi.popular(page.popular);
-    setData({
-      ...data,
-      popular: [...data.popular, ...popular]
-    });
-  }
-
-  const LoadAiringToday = async () => {
     const {
       data: { results: airingToday },
     } = await tvApi.airingToday(page.airingToday);
-    setData({
-      ...data,
-      airingToday: [...data.airingToday, ...airingToday]
-    });
-  }
+    switch (target) {
+      case 0:
+        return setData({
+          ...data,
+          topRated: [...data.topRated, ...topRated],
+        });
+      case 1:
+        return setData({
+          ...data,
+          popular: [...data.popular, ...popular],
+        });
+      case 2:
+        return setData({
+          ...data,
+          airingToday: [...data.airingToday, ...airingToday],
+        });
+      default:
+        return setData({
+          topRated: [...data.topRated, ...topRated],
+          popular: [...data.popular, ...popular],
+          airingToday: [...data.airingToday, ...airingToday],
+        });
+    }
+  };
 
   const nextPage = {
-    topRatedPage: () => setPage({ ...page, topRated: page.topRated + 1 }),
-    popularPage: () => setPage({ ...page, popular: page.popular + 1 }),
-    airingTodayPage: () =>
-      setPage({ ...page, airingToday: page.airingToday + 1 }),
+    topRatedPage: () => {
+      setTargetData(0);
+      setPage({ ...page, topRated: page.topRated + 1 });
+    },
+    popularPage: () => {
+      setTargetData(1);
+      setPage({ ...page, popular: page.popular + 1 });
+    },
+    airingTodayPage: () => {
+      setTargetData(2);
+      setPage({ ...page, airingToday: page.airingToday + 1 });
+    },
   };
 
   const viewMode = {
-    topRatedView: () =>
-      setView({ ...view, topRated: view.topRated ? false : true }),
-    popularView: () =>
-      setView({ ...view, popular: view.popular ? false : true }),
-    airingTodayView: () =>
-      setView({ ...view, airingToday: view.airingToday ? false : true }),
+    topRatedView: () => setView({ ...view, topRated: !view.topRated }),
+    popularView: () => setView({ ...view, popular: !view.popular }),
+    airingTodayView: () => setView({ ...view, airingToday: !view.airingToday }),
   };
 
   useEffect(() => {
@@ -97,27 +96,10 @@ const TVContainer = () => {
   }, []);
 
   useEffect(() => {
-    LoadTopRated();
-  }, [page.topRated]);
+    LoadPages(targetData);
+  }, [page]);
 
-  useEffect(() => {
-    LoadPopular();
-  }, [page.popular]);
-
-  useEffect(() => {
-    LoadAiringToday();
-  }, [page.airingToday]);
-
-  return (
-    <TVPresenter
-      loading={loading}
-      error={error}
-      pageFunc={nextPage}
-      viewFunc={viewMode}
-      view={view}
-      {...data}
-    />
-  );
+  return <TVPresenter loading={loading} error={error} pageFunc={nextPage} viewFunc={viewMode} view={view} {...data} />;
 };
 
 export default TVContainer;
